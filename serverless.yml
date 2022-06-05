@@ -1,0 +1,77 @@
+service: payments-api
+
+frameworkVersion: ^2.15.0
+
+# Create an optimized package for our functions
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle # Package our functions with Webpack
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, 'development'}
+  region: ap-southeast-2
+  httpApi:
+    cors: true
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    STAGE: ${opt:stage, 'development'}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Resource:
+        - arn:aws:dynamodb:*:*:table/*
+      Action:
+        - 'dynamodb:*'
+
+functions:
+  createPayment:
+    description: Create payment
+    handler: handler.create
+    events:
+      - httpApi:
+          method: 'POST'
+          path: '/'
+
+  updatePayment:
+    description: Update payment
+    handler: handler.update
+    events:
+      - httpApi:
+          method: 'POST'
+          path: '/'
+
+  getPayment:
+    description: Get payment
+    handler: handler.get
+    events:
+      - httpApi:
+          method: 'POST'
+          path: '/'
+
+  listPayments:
+    description: List payments
+    handler: handler.list
+    events:
+      - httpApi:
+          method: 'POST'
+          path: '/'
+
+  deletePayment:
+    description: Delete payment
+    handler: handler.delete
+    events:
+      - httpApi:
+          method: 'POST'
+          path: '/'
+
+custom:
+  bundle:
+    linting: false
+  serverless-offline:
+    httpPort: 2000

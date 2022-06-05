@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "init:dev": "sls deploy --stage development",
+    "init:prod": "sls deploy --stage production",
+    "deploy:dev": "sls deploy function -f event --stage development",
+    "deploy:production": "sls deploy function -f event --stage production",
+    "dev": "sls offline start --stage development",
+    "dev:production": "sls offline start --stage production"
   },
   "author": "Praveen Jayarajan",
   "license": "ISC",
