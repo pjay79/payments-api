@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "controllers/*": ["src/controllers/*"],
+      "constants/*": ["src/constants/*"],
+      "middleware/*": ["src/middleware/*"],
+      "exceptions/*": ["src/exceptions/*"],
+      "types/*": ["src/types/*"],
+      "services/*": ["src/services/*"],
+      "models/*": ["src/models/*"],
+      "utils/*": ["src/utils/*"]
+    },
+    "target": "es6",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true
+  }
+}
