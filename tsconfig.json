@@ -9,6 +9,7 @@
       "types/*": ["src/types/*"],
       "services/*": ["src/services/*"],
       "models/*": ["src/models/*"],
+      "libs/*": ["src/libs/*"],
       "utils/*": ["src/utils/*"]
     },
     "target": "es6",

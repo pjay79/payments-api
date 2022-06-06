@@ -1,77 +1,120 @@
+org: pjay79
+app: payments-api
 service: payments-api
 
 frameworkVersion: ^2.15.0
+useDotenv: true
 
-# Create an optimized package for our functions
 package:
   individually: true
 
 plugins:
-  - serverless-bundle # Package our functions with Webpack
+  - serverless-bundle
   - serverless-offline
 
 provider:
   name: aws
+  lambdaHashingVersion: 20201221
   runtime: nodejs14.x
   stage: ${opt:stage, 'development'}
   region: ap-southeast-2
-  httpApi:
-    cors: true
   apiGateway:
     minimumCompressionSize: 1024
   environment:
     STAGE: ${opt:stage, 'development'}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Resource:
-        - arn:aws:dynamodb:*:*:table/*
-      Action:
-        - 'dynamodb:*'
+  iam:
+      role:
+        statements:
+          - Effect: Allow
+            Action:
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Resource:
+              - Fn::GetAtt: [PaymentsTable, Arn ]
 
 functions:
   createPayment:
     description: Create payment
-    handler: handler.create
+    handler: handler.createPayment
+    environment:
+      STAGE: ${env:STAGE}
+      REGION: ${env:REGION}
     events:
-      - httpApi:
-          method: 'POST'
-          path: '/'
+      - http:
+          path: /payments
+          method: post
+          cors: true
 
   updatePayment:
     description: Update payment
-    handler: handler.update
+    handler: handler.updatePayment
+    environment:
+      STAGE: ${env:STAGE}
+      REGION: ${env:REGION}
     events:
-      - httpApi:
-          method: 'POST'
-          path: '/'
+      - http:
+          path: /payments/{id}
+          method: put
+          cors: true
 
   getPayment:
     description: Get payment
-    handler: handler.get
+    handler: handler.getPayment
+    environment:
+      STAGE: ${env:STAGE}
+      REGION: ${env:REGION}
     events:
-      - httpApi:
-          method: 'POST'
-          path: '/'
+      - http:
+          path: /payments/{id}
+          method: get
+          cors: true
 
   listPayments:
     description: List payments
-    handler: handler.list
+    handler: handler.listPayments
+    environment:
+      STAGE: ${env:STAGE}
+      REGION: ${env:REGION}
     events:
-      - httpApi:
-          method: 'POST'
-          path: '/'
+      - http:
+          path: /payments
+          method: get
+          cors: true
 
   deletePayment:
     description: Delete payment
-    handler: handler.delete
+    handler: handler.deletePayment
+    environment:
+      STAGE: ${env:STAGE}
+      REGION: ${env:REGION}
     events:
-      - httpApi:
-          method: 'POST'
-          path: '/'
+      - http:
+          path: /payments/{id}
+          method: delete
+          cors: true
 
 custom:
   bundle:
     linting: false
   serverless-offline:
     httpPort: 2000
+  tableName: '${sls:stage}_payments'   
+
+resources: 
+  Resources:
+    PaymentsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.tableName}
