@@ -13,6 +13,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
 
     strategy:
       matrix:
@@ -28,13 +32,13 @@ jobs:
     - name: Start
       run: |
           if [[ `git diff --name-only HEAD~1 HEAD | grep serverless.yml` ]]; then
-            yarn sls deploy --stage development
+            yarn serverless deploy --stage development
           else
-            yarn sls deploy function -f createPayment --stage development
-            yarn sls deploy function -f updatePayment --stage development
-            yarn sls deploy function -f getPayment --stage development
-            yarn sls deploy function -f listPayments --stage development
-            yarn sls deploy function -f deletePayment --stage development
+            yarn serverless deploy function -f createPayment --stage development
+            yarn serverless deploy function -f updatePayment --stage development
+            yarn serverless deploy function -f getPayment --stage development
+            yarn serverless deploy function -f listPayments --stage development
+            yarn serverless deploy function -f deletePayment --stage development
           fi
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
