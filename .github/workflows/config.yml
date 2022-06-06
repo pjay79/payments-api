@@ -29,17 +29,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-    - name: Start
-      run: |
-          if [[ `git diff --name-only HEAD~1 HEAD | grep serverless.yml` ]]; then
-            yarn serverless deploy --stage development
-          else
-            yarn serverless deploy function -f createPayment --stage development
-            yarn serverless deploy function -f updatePayment --stage development
-            yarn serverless deploy function -f getPayment --stage development
-            yarn serverless deploy function -f listPayments --stage development
-            yarn serverless deploy function -f deletePayment --stage development
-          fi
+    - name: Serverless Deploy
+      uses: serverless/github-action@v3.1
+      with:
+        args: deploy --stage development
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
