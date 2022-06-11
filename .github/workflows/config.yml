@@ -44,7 +44,7 @@ jobs:
           serverless deploy --stage development
         elif [ ${GITHUB_REF##*/} == "main" ]; then
           serverless deploy --stage production
-        else;
+        else
           echo "Skipping deployment"
         fi
       env:
