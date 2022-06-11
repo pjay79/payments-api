@@ -1,8 +1,6 @@
-org: pjay79
-app: payments-api
 service: payments-api
 
-frameworkVersion: ^2.15.0
+frameworkVersion: v3
 useDotenv: true
 
 package:
