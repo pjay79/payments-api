@@ -1,5 +1,3 @@
-org: pjay79
-app: payments-api
 service: payments-api
 
 frameworkVersion: v2
