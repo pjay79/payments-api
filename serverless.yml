@@ -1,6 +1,6 @@
 service: payments-api
 
-frameworkVersion: v2
+frameworkVersion: v3
 useDotenv: true
 
 package:
