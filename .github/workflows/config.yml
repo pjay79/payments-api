@@ -40,7 +40,13 @@ jobs:
       run: |
         yarn
         npm install -g serverless@2
-        serverless deploy --stage development
+        if [ ${GITHUB_REF##*/} == "develop" ]; then
+          serverless deploy --stage development
+        elif [ ${GITHUB_REF##*/} == "main" ]; then
+          serverless deploy --stage production
+        else;
+          echo "Skipping deployment"
+        fi
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
