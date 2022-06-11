@@ -15,7 +15,7 @@ plugins:
 provider:
   name: aws
   lambdaHashingVersion: 20201221
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   stage: ${opt:stage, 'development'}
   region: ap-southeast-2
   apiGateway:
