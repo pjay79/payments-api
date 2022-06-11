@@ -39,7 +39,7 @@ jobs:
     - name: Serverless Deploy
       run: |
         yarn
-        npm install -g serverless@2
+        npm install -g serverless@3
         if [ ${GITHUB_REF##*/} == "develop" ]; then
           serverless deploy --stage development
         elif [ ${GITHUB_REF##*/} == "main" ]; then
