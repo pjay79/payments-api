@@ -47,4 +47,4 @@ jobs:
       run: |
         yarn
         npm install -g serverless@3
-        serverless deploy --stage ${ENVIRONMENT_NAME}
+        serverless deploy --stage "${ENVIRONMENT_NAME}""
