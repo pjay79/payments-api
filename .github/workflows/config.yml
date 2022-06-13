@@ -46,5 +46,4 @@ jobs:
     - name: Serverless Deploy
       run: |
         yarn
-        npm install -g serverless@3
         serverless deploy --stage development
