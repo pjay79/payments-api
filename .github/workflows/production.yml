@@ -33,7 +33,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        # cache: yarn
+        cache: yarn
     - name: Get env
       run: |
         aws s3 cp s3://payments-env-vars/.env.prod .env
