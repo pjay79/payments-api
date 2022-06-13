@@ -24,6 +24,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      ENVIRONMENT_NAME: ${{ secrets.ENVIRONMENT_NAME }}
 
     strategy:
       matrix:
@@ -43,4 +44,4 @@ jobs:
       run: |
         yarn
         npm install -g serverless@3
-        serverless deploy --stage ${{ secrets.ENVIRONMENT_NAME }}
+        serverless deploy --stage $ENVIRONMENT_NAME
