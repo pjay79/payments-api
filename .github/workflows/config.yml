@@ -27,6 +27,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      ENVIRONMENT_NAME: ${{ secrets.ENVIRONMENT_NAME }}
 
     steps:
     - uses: actions/checkout@v3
@@ -43,11 +44,9 @@ jobs:
           aws s3 cp s3://payments-env-vars/.env.dev .env
         fi
     - name: Serverless Deploy
-      env:
-        ENVIRONMENT_NAME: ${{ secrets.ENVIRONMENT_NAME }}
       run: |
         yarn
         npm install -g serverless@3
         echo ${{ secrets.ENVIRONMENT_NAME }}
-        echo $ENIRONMENT_NAME
+        echo $ENVIRONMENT_NAME
         # serverless deploy --stage ${env:ENVIRONMENT_NAME}
