@@ -13,6 +13,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: ${{ secrets.ENVIRONMENT_NAME }}
 
     defaults:
       run:
@@ -47,4 +48,4 @@ jobs:
       run: |
         yarn
         npm install -g serverless@3
-        serverless deploy --stage ${{ env.ENVIRONMENT_NAME }}
+        serverless deploy --stage ${{ secrets.ENVIRONMENT_NAME }}
