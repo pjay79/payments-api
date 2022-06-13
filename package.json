@@ -10,7 +10,8 @@
     "deploy:dev": "sls deploy function -f createPayment --stage development",
     "deploy:production": "sls deploy function -f createPayment --stage production",
     "dev": "sls offline start --stage development",
-    "dev:production": "sls offline start --stage production"
+    "dev:production": "sls offline start --stage production",
+    "prepare": "husky install"
   },
   "author": "Praveen Jayarajan",
   "license": "ISC",
