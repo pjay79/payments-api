@@ -47,5 +47,5 @@ jobs:
       run: |
         yarn
         npm install -g serverless@3
-        echo "${ENVIRONMENT_NAME}"
+        echo "Env is this: ${ENVIRONMENT_NAME}"
         # serverless deploy --stage "${ENVIRONMENT_NAME}"
