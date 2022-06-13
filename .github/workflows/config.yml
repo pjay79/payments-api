@@ -30,6 +30,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: yarn
     - name: Serverless Deploy
+      env:
+        STAGE: ${{ secrets.STAGE }}
+        REGION: ${{ secrets.REGION }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         yarn
         npm install -g serverless@3
@@ -40,8 +45,4 @@ jobs:
         else
           echo "Skipping deployment"
         fi
-      env:
-        STAGE: ${{ secrets.STAGE }}
-        REGION: ${{ secrets.REGION }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
