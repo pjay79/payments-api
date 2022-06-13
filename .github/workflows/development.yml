@@ -5,15 +5,15 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "develop", "feature/ci" ]
+    branches: [ "develop", "feature/ci" ]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-    # environment: development
+    environment: development
 
     defaults:
       run:
@@ -38,11 +38,7 @@ jobs:
         # cache: yarn
     - name: Get env
       run: |
-        if [ ${GITHUB_REF##*/} == "main" ]; then
-          aws s3 cp s3://payments-env-vars/.env.prod .env
-        else
-          aws s3 cp s3://payments-env-vars/.env.dev .env
-        fi
+        aws s3 cp s3://payments-env-vars/.env.dev .env
     - name: Serverless Deploy
       run: |
         yarn
