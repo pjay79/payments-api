@@ -16,111 +16,148 @@ const TableName = `${process.env.STAGE}_payments`;
 export const createPayment: Handler = async (
   event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResultV2> => {
-  const data = JSON.parse(event.body);
+  try {
+    const data = JSON.parse(event.body);
 
-  const payment = {
-    id: uuidv4(),
-    customer: data.customer,
-    amount: data.amount,
-    product: data.product
-  }
-
-  await db
-    .put({
-      TableName,
-      Item: payment,
-    })
-    .promise().catch(err => console.error(err))
-
-  return { 
-    statusCode: 200, 
-    body: JSON.stringify(payment),
+    const payment = {
+      id: uuidv4(),
+      customer: data.customer,
+      amount: data.amount,
+      product: data.product
+    }
+  
+    await db
+      .put({
+        TableName,
+        Item: payment,
+      })
+      .promise().catch(err => console.error(err))
+  
+    return { 
+      statusCode: 200, 
+      body: JSON.stringify(payment),
+    }
+  } catch(e) {
+    console.error(e);
+    return { 
+      statusCode: 404, 
+      body: '',
+    }
   }
 };
 
 export const updatePayment: Handler = async (
   event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResultV2> => {
-  const id = event.pathParameters.id;
-  const data = JSON.parse(event.body);
-
-  const response = await db
-    .update({
-      TableName,
-      Key: { id },
-      UpdateExpression: "set customer = :customer, amount = :amount, product = :product",
-      ExpressionAttributeValues: {
-        ":customer": data.customer, 
-        ":amount": data.amount, 
-        ":product": data.product, 
-      },
-      ReturnValues: "ALL_NEW"
-    })
-    .promise()
-    .then(response => response.Attributes)
-    .catch(error => console.error(error))
-
-  return { 
-    statusCode: 200, 
-    body: JSON.stringify(response),
+  try {
+    const id = event.pathParameters.id;
+    const data = JSON.parse(event.body);
+  
+    const response = await db
+      .update({
+        TableName,
+        Key: { id },
+        UpdateExpression: "set customer = :customer, amount = :amount, product = :product",
+        ExpressionAttributeValues: {
+          ":customer": data.customer, 
+          ":amount": data.amount, 
+          ":product": data.product, 
+        },
+        ReturnValues: "ALL_NEW"
+      })
+      .promise()
+      .then(response => response.Attributes)
+      .catch(error => console.error(error))
+  
+    return { 
+      statusCode: 200, 
+      body: JSON.stringify(response),
+    }
+  } catch(e) {
+    console.error(e);
+    return { 
+      statusCode: 404, 
+      body: '',
+    }
   }
 };
 
 export const getPayment: Handler = async (
   event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResultV2> => {
-  const id = event.pathParameters.id;
+  try {
+    const id = event.pathParameters.id;
   
-  const data = await db
-    .get({
-      TableName,
-      Key: {
-        id,
-      },
-    })
-    .promise()
-    .then(response => response.Item)
-    .catch(error => console.error(error))
-
-  return { 
-    statusCode: 200, 
-    body: JSON.stringify(data),
+    const data = await db
+      .get({
+        TableName,
+        Key: {
+          id,
+        },
+      })
+      .promise()
+      .then(response => response.Item)
+      .catch(error => console.error(error))
+  
+    return { 
+      statusCode: 200, 
+      body: JSON.stringify(data),
+    }
+  } catch(e) {
+    console.error(e);
+    return { 
+      statusCode: 404, 
+      body: '',
+    }
   }
 };
 
-export const listPayments: Handler = async (
-  event: APIGatewayProxyEventV2,
-): Promise<APIGatewayProxyResultV2> => {
-  
-  const data = await db
-    .scan({ TableName })
-    .promise()
-    .then(response => response.Items)
-    .catch(error => console.error(error))
+export const listPayments: Handler = async (): Promise<APIGatewayProxyResultV2> => {
+  try {  
+    const data = await db
+      .scan({ TableName })
+      .promise()
+      .then(response => response.Items)
+      .catch(error => console.error(error))
 
-  return { 
-    statusCode: 200, 
-    body: JSON.stringify(data),
+    return { 
+      statusCode: 200, 
+      body: JSON.stringify(data),
+    }
+  } catch(e) {
+    console.error(e);
+    return { 
+      statusCode: 404, 
+      body: '',
+    }
   }
 };
 
 export const deletePayment: Handler = async (
   event: APIGatewayProxyEventV2,
 ): Promise<APIGatewayProxyResultV2> => {
-  const id = event.pathParameters.id;
+  try {
+    const id = event.pathParameters.id;
 
-  await db
-    .delete({
-      TableName,
-      Key: {
-        id,
-      },
-    })
-    .promise().catch(error => console.error(error))
-
-  return { 
-    statusCode: 200, 
-    body: ''
+    await db
+      .delete({
+        TableName,
+        Key: {
+          id,
+        },
+      })
+      .promise().catch(error => console.error(error))
+  
+    return { 
+      statusCode: 200, 
+      body: ''
+    }
+  } catch(e) {
+    console.error(e);
+    return { 
+      statusCode: 404, 
+      body: '',
+    }
   }
 };
 
