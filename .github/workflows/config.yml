@@ -43,9 +43,11 @@ jobs:
           aws s3 cp s3://payments-env-vars/.env.dev .env
         fi
     - name: Serverless Deploy
+      env:
+        ENVIRONMENT_NAME: ${{ secrets.ENVIRONMENT_NAME }}
       run: |
         yarn
         npm install -g serverless@3
-        serverless deploy --stage ${Env:ENVIRONMENT_NAME}
-      env:
-        ENVIRONMENT_NAME: ${{ secrets.ENVIRONMENT_NAME }}
+        echo ${{ secrets.ENVIRONMENT_NAME }}
+        echo $ENIRONMENT_NAME
+        # serverless deploy --stage ${env:ENVIRONMENT_NAME}
