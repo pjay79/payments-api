@@ -33,7 +33,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: yarn
+        # Note: commenting out line below due to this error "getCacheEntry failed: Cache service responded with 503", refer to this issue https://github.com/actions/cache/issues/820
+        # cache: yarn
     - name: Get env
       run: |
         aws s3 cp s3://payments-env-vars/.env.dev .env
