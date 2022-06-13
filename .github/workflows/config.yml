@@ -49,4 +49,5 @@ jobs:
         npm install -g serverless@3
         echo "${{ secrets.ENVIRONMENT_NAME }}"
         echo "$ENVIRONMENT_NAME"
+        echo "${{ env.ENVIRONMENT_NAME }}"
         # serverless deploy --stage ${env:ENVIRONMENT_NAME}
