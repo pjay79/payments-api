@@ -46,6 +46,6 @@ jobs:
       run: |
         yarn
         npm install -g serverless@3
-        serverless deploy --stage $(echo ${Env:ENVIRONMENT_NAME})
+        serverless deploy --stage ${Env:ENVIRONMENT_NAME}
       env:
         ENVIRONMENT_NAME: ${{ secrets.ENVIRONMENT_NAME }}
