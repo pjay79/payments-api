@@ -29,20 +29,23 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: yarn
-    - name: Serverless Deploy
+    - name: Get env
+      run: |
+        if [ ${GITHUB_REF##*/} == "main" ]; then
+          aws s3 cp s3://payments-env-vars/.env.prod .env
+        else
+          aws s3 cp s3://payments-env-vars/.env.dev .env
+        fi
       env:
-        STAGE: ${{ secrets.STAGE }}
-        REGION: ${{ secrets.REGION }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+    - name: Serverless Deploy
       run: |
         yarn
         npm install -g serverless@3
-        if [ ${GITHUB_REF##*/} == "develop" ]; then
-          serverless deploy --stage development
-        elif [ ${GITHUB_REF##*/} == "main" ]; then
-          serverless deploy --stage production
-        else
-          echo "Skipping deployment"
-        fi
-
+        serverless deploy --stage ${{ secrets.ENVIRONMENT_NAME }}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
