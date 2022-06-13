@@ -13,7 +13,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    environment: ${{ secrets.ENVIRONMENT_NAME }}
+    environment: development
 
     defaults:
       run:
