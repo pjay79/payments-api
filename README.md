@@ -4,7 +4,7 @@ This is a demo Serverless Node.js API.
 
 ## How do I get set up?
 
-Add a .env file with the following variables:
+Add a .env file with the following variables (replace region with your preferred value on AWS):
 
 ```
 STAGE=development
@@ -32,3 +32,5 @@ In this example we have created 2 environments, development and production. Thes
 In this example there are 2 separate workflows for each environment, with development tied to the develop branch, and production to the main branch.
 
 <img width="1403" alt="Screen Shot 2022-06-14 at 1 29 20 pm" src="https://user-images.githubusercontent.com/14052885/173487499-0f4dec7f-f1a2-4ac6-a3fc-9cd7e8b8718b.png">
+
+Note: the config.yml fetches an environment file from an S3 bucket.
