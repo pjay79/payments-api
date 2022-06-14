@@ -19,29 +19,27 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024
   environment:
-    STAGE: ${opt:stage, 'development'}
+    STAGE: ${env:STAGE}
+    REGION: ${env:REGION}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
   iam:
-      role:
-        statements:
-          - Effect: Allow
-            Action:
-              - dynamodb:Query
-              - dynamodb:Scan
-              - dynamodb:GetItem
-              - dynamodb:PutItem
-              - dynamodb:UpdateItem
-              - dynamodb:DeleteItem
-            Resource:
-              - Fn::GetAtt: [PaymentsTable, Arn ]
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [PaymentsTable, Arn]
 
 functions:
   createPayment:
     description: Create payment
     handler: handler.createPayment
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
     events:
       - http:
           path: /payments
@@ -51,9 +49,6 @@ functions:
   updatePayment:
     description: Update payment
     handler: handler.updatePayment
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
     events:
       - http:
           path: /payments/{id}
@@ -63,9 +58,6 @@ functions:
   getPayment:
     description: Get payment
     handler: handler.getPayment
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
     events:
       - http:
           path: /payments/{id}
@@ -75,9 +67,6 @@ functions:
   listPayments:
     description: List payments
     handler: handler.listPayments
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
     events:
       - http:
           path: /payments
@@ -87,9 +76,6 @@ functions:
   deletePayment:
     description: Delete payment
     handler: handler.deletePayment
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
     events:
       - http:
           path: /payments/{id}
@@ -101,9 +87,9 @@ custom:
     linting: false
   serverless-offline:
     httpPort: 2000
-  tableName: '${sls:stage}_payments'   
+  tableName: "${sls:stage}_payments"
 
-resources: 
+resources:
   Resources:
     PaymentsTable:
       Type: AWS::DynamoDB::Table
