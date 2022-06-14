@@ -8,6 +8,7 @@ package:
 
 plugins:
   - serverless-bundle
+  - serverless-dynamodb-local
   - serverless-offline
 
 provider:
@@ -88,6 +89,17 @@ custom:
   serverless-offline:
     httpPort: 2000
   tableName: "${sls:stage}_payments"
+  dynamodb:
+    stages:
+      - development
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: false
+      convertEmptyValues: true
 
 resources:
   Resources:

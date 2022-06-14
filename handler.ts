@@ -8,8 +8,19 @@ import AWS, { DynamoDB } from "aws-sdk";
 import { v4 as uuidv4 } from "uuid";
 
 AWS.config.update({ region: process.env.REGION });
-const db = new DynamoDB.DocumentClient();
-const TableName = `${process.env.STAGE}_payments`;
+
+const { IS_OFFLINE } = process.env;
+
+const dynamoDbOfflineOptions = {
+  region: "localhost",
+  endpoint: "http://localhost:8000",
+};
+
+const db = IS_OFFLINE
+  ? new DynamoDB.DocumentClient(dynamoDbOfflineOptions)
+  : new DynamoDB.DocumentClient();
+
+const TableName = `${process.env.STAGE}_paymentss`;
 
 export const createPayment: Handler = async (
   event: APIGatewayProxyEventV2
@@ -30,17 +41,23 @@ export const createPayment: Handler = async (
         Item: payment,
       })
       .promise()
-      .catch((err) => console.error(err));
+      .catch((e) => {
+        throw new Error(e);
+      });
 
     return {
       statusCode: 200,
       body: JSON.stringify(payment),
     };
   } catch (e) {
-    console.error(e);
+    console.error("[PAYMENTS API] - CREATE", e);
+
     return {
       statusCode: 404,
-      body: "",
+      body: JSON.stringify({
+        message: "Unable to create payment",
+        error: e.message,
+      }),
     };
   }
 };
@@ -67,17 +84,23 @@ export const updatePayment: Handler = async (
       })
       .promise()
       .then((response) => response.Attributes)
-      .catch((error) => console.error(error));
+      .catch((e) => {
+        throw new Error(e);
+      });
 
     return {
       statusCode: 200,
       body: JSON.stringify(response),
     };
   } catch (e) {
-    console.error(e);
+    console.error("[PAYMENTS API] - UPDATE", e);
+
     return {
       statusCode: 404,
-      body: "",
+      body: JSON.stringify({
+        message: "Unable to update payment",
+        error: e.message,
+      }),
     };
   }
 };
@@ -97,17 +120,23 @@ export const getPayment: Handler = async (
       })
       .promise()
       .then((response) => response.Item)
-      .catch((error) => console.error(error));
+      .catch((e) => {
+        throw new Error(e);
+      });
 
     return {
       statusCode: 200,
       body: JSON.stringify(data),
     };
   } catch (e) {
-    console.error(e);
+    console.error("[PAYMENTS API] - GET", e);
+
     return {
       statusCode: 404,
-      body: "",
+      body: JSON.stringify({
+        message: "Unable to get payment",
+        error: e.message,
+      }),
     };
   }
 };
@@ -119,17 +148,23 @@ export const listPayments: Handler =
         .scan({ TableName })
         .promise()
         .then((response) => response.Items)
-        .catch((error) => console.error(error));
+        .catch((e) => {
+          throw new Error(e);
+        });
 
       return {
         statusCode: 200,
         body: JSON.stringify(data),
       };
     } catch (e) {
-      console.error(e);
+      console.error("[PAYMENTS API] - LIST", e);
+
       return {
         statusCode: 404,
-        body: "",
+        body: JSON.stringify({
+          message: "Unable to get payments",
+          error: e.message,
+        }),
       };
     }
   };
@@ -148,17 +183,23 @@ export const deletePayment: Handler = async (
         },
       })
       .promise()
-      .catch((error) => console.error(error));
+      .catch((e) => {
+        throw new Error(e);
+      });
 
     return {
       statusCode: 200,
       body: "",
     };
   } catch (e) {
-    console.error(e);
+    console.error("[PAYMENTS API] - DELETE", e);
+
     return {
       statusCode: 404,
-      body: "",
+      body: JSON.stringify({
+        message: "Unable to delete payment",
+        error: e.message,
+      }),
     };
   }
 };

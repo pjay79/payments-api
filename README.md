@@ -1,6 +1,6 @@
 # Payments API
 
-This is a demo Serverless Node.js API.
+This is a demo Serverless Node.js API using Github Actions for CI/CD.
 
 ## How do I get set up?
 
@@ -11,7 +11,15 @@ STAGE=development
 REGION=ap-southeast-2
 ```
 
-Then run the command:
+Install npm dependencies:
+
+`yarn`
+
+Install DynamoDb locally:
+
+`sls dynamodb install`
+
+Start:
 
 `yarn run dev`
 

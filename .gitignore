@@ -56,3 +56,6 @@ Thumbs.db
 
 # Jest
 /coverage
+
+# DynamoDb local
+.dynamodb
