@@ -20,7 +20,7 @@ const db = IS_OFFLINE
   ? new DynamoDB.DocumentClient(dynamoDbOfflineOptions)
   : new DynamoDB.DocumentClient();
 
-const TableName = `${process.env.STAGE}_paymentss`;
+const TableName = `${process.env.STAGE}_payments`;
 
 export const createPayment: Handler = async (
   event: APIGatewayProxyEventV2
