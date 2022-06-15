@@ -40,7 +40,7 @@ provider:
 functions:
   createPayment:
     description: Create payment
-    handler: handler.createPayment
+    handler: handler.api
     events:
       - http:
           path: /payments
@@ -49,7 +49,7 @@ functions:
 
   updatePayment:
     description: Update payment
-    handler: handler.updatePayment
+    handler: handler.api
     events:
       - http:
           path: /payments/{id}
@@ -58,7 +58,7 @@ functions:
 
   getPayment:
     description: Get payment
-    handler: handler.getPayment
+    handler: handler.api
     events:
       - http:
           path: /payments/{id}
@@ -67,7 +67,7 @@ functions:
 
   listPayments:
     description: List payments
-    handler: handler.listPayments
+    handler: handler.api
     events:
       - http:
           path: /payments
@@ -76,7 +76,7 @@ functions:
 
   deletePayment:
     description: Delete payment
-    handler: handler.deletePayment
+    handler: handler.api
     events:
       - http:
           path: /payments/{id}
