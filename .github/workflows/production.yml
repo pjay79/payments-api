@@ -2,13 +2,12 @@ name: Payments API - PROD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     environment: production
 
@@ -28,18 +27,17 @@ jobs:
         node-version: [14.x]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        # Note: commenting out line below due to this error "getCacheEntry failed: Cache service responded with 503", refer to this issue https://github.com/actions/cache/issues/820
-        # cache: yarn
-    - name: Get env
-      run: |
-        aws s3 cp s3://payments-env-vars/.env.prod .env
-    - name: Serverless Deploy
-      run: |
-        yarn
-        npm install -g serverless@3
-        serverless deploy --stage $ENVIRONMENT_NAME
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+      - name: Get env
+        run: |
+          aws s3 cp s3://payments-env-vars/.env.prod .env
+      - name: Serverless Deploy
+        run: |
+          yarn
+          npm install -g serverless@3
+          serverless deploy --stage $ENVIRONMENT_NAME

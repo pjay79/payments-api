@@ -8,6 +8,7 @@ package:
 
 plugins:
   - serverless-bundle
+  - serverless-dynamodb-local
   - serverless-offline
 
 provider:
@@ -19,29 +20,28 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024
   environment:
-    STAGE: ${opt:stage, 'development'}
+    STAGE: ${env:STAGE}
+    REGION: ${env:REGION}
+    X_PAYMENTS_API_KEY: ${env:X_PAYMENTS_API_KEY}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
   iam:
-      role:
-        statements:
-          - Effect: Allow
-            Action:
-              - dynamodb:Query
-              - dynamodb:Scan
-              - dynamodb:GetItem
-              - dynamodb:PutItem
-              - dynamodb:UpdateItem
-              - dynamodb:DeleteItem
-            Resource:
-              - Fn::GetAtt: [PaymentsTable, Arn ]
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [PaymentsTable, Arn]
 
 functions:
   createPayment:
     description: Create payment
-    handler: handler.createPayment
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
+    handler: handler.api
     events:
       - http:
           path: /payments
@@ -50,10 +50,7 @@ functions:
 
   updatePayment:
     description: Update payment
-    handler: handler.updatePayment
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
+    handler: handler.api
     events:
       - http:
           path: /payments/{id}
@@ -62,10 +59,7 @@ functions:
 
   getPayment:
     description: Get payment
-    handler: handler.getPayment
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
+    handler: handler.api
     events:
       - http:
           path: /payments/{id}
@@ -74,10 +68,7 @@ functions:
 
   listPayments:
     description: List payments
-    handler: handler.listPayments
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
+    handler: handler.api
     events:
       - http:
           path: /payments
@@ -86,10 +77,7 @@ functions:
 
   deletePayment:
     description: Delete payment
-    handler: handler.deletePayment
-    environment:
-      STAGE: ${env:STAGE}
-      REGION: ${env:REGION}
+    handler: handler.api
     events:
       - http:
           path: /payments/{id}
@@ -101,9 +89,20 @@ custom:
     linting: false
   serverless-offline:
     httpPort: 2000
-  tableName: '${sls:stage}_payments'   
+  tableName: "${sls:stage}_payments"
+  dynamodb:
+    stages:
+      - development
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: false
+      convertEmptyValues: true
 
-resources: 
+resources:
   Resources:
     PaymentsTable:
       Type: AWS::DynamoDB::Table

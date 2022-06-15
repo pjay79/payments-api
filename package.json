@@ -27,6 +27,7 @@
   "dependencies": {
     "aws-sdk": "^2.1148.0",
     "dynamoose": "^2.8.5",
+    "serverless-dynamodb-local": "^0.2.40",
     "uuid": "^8.3.2",
     "yup": "^0.32.11"
   }
