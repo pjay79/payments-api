@@ -16,7 +16,7 @@ const deletePayment: Handler = async (
   try {
     const { id } = event.pathParameters;
 
-    const payment = await db
+    await db
       .delete({
         TableName: tableName,
         Key: {
