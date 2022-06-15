@@ -7,7 +7,7 @@ import {
   Handler,
 } from "aws-lambda";
 import { v4 as uuidv4 } from "uuid";
-import { response } from "utils/index";
+import { getData, response } from "utils/index";
 import { db, tableName } from "models/payments";
 
 const createPayment: Handler = async (
@@ -16,7 +16,7 @@ const createPayment: Handler = async (
   callback: Callback
 ): Promise<APIGatewayProxyResultV2> => {
   try {
-    const data = JSON.parse(event.body);
+    const data = getData(event);
 
     const payment = {
       id: uuidv4(),

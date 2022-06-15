@@ -5,7 +5,7 @@ import {
   Callback,
   Handler,
 } from "aws-lambda";
-import { response } from "utils/index";
+import { getData, response } from "utils/index";
 import { db, tableName } from "models/payments";
 
 const updatePayment: Handler = async (
@@ -14,8 +14,8 @@ const updatePayment: Handler = async (
   callback: Callback
 ): Promise<APIGatewayProxyResultV2> => {
   try {
-    const id = event.pathParameters.id;
-    const data = JSON.parse(event.body);
+    const { id } = event.pathParameters;
+    const data = getData(event);
 
     const payment = await db
       .update({

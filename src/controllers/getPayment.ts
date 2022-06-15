@@ -14,7 +14,7 @@ const getPayment: Handler = async (
   callback: Callback
 ): Promise<APIGatewayProxyResultV2> => {
   try {
-    const id = event.pathParameters.id;
+    const { id } = event.pathParameters;
 
     const payment = await db
       .get({
