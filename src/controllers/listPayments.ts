@@ -7,6 +7,8 @@ import {
 } from "aws-lambda";
 import { response } from "utils/index";
 import { db, tableName } from "models/payments";
+import checkPermissions from "middleware/checkPermissions";
+import HttpException from "exceptions/HttpException";
 
 const listPayments: Handler = async (
   event: APIGatewayProxyEventV2,
@@ -14,6 +16,12 @@ const listPayments: Handler = async (
   callback: Callback
 ): Promise<APIGatewayProxyResultV2> => {
   try {
+    const isAuthorized = checkPermissions(event);
+
+    if (!isAuthorized) {
+      throw new HttpException("Unauthorized request", 403);
+    }
+
     const payments = await db
       .scan({ TableName: tableName })
       .promise()
@@ -31,7 +39,7 @@ const listPayments: Handler = async (
       error: e.message,
     };
 
-    return response(404, error);
+    return response(e.statusCode || 404, error);
   }
 };
 

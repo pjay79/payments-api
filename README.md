@@ -4,11 +4,12 @@ This is a demo Serverless Node.js API using Github Actions for CI/CD.
 
 ## How do I get set up?
 
-Add a .env file with the following variables (replace region with your preferred value on AWS):
+Add a .env file with the following variables (replace region with your preferred value on AWS), enter the private api key supplied:
 
 ```
 STAGE=development
 REGION=ap-southeast-2
+X_PAYMENTS_API_KEY=<% ENTER THE PRIVATE API KEY HERE %>
 ```
 
 Install npm dependencies:

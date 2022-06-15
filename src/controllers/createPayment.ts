@@ -9,6 +9,8 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { getData, response } from "utils/index";
 import { db, tableName } from "models/payments";
+import checkPermissions from "middleware/checkPermissions";
+import HttpException from "exceptions/HttpException";
 
 const createPayment: Handler = async (
   event: APIGatewayProxyEventV2,
@@ -16,6 +18,12 @@ const createPayment: Handler = async (
   callback: Callback
 ): Promise<APIGatewayProxyResultV2> => {
   try {
+    const isAuthorized = checkPermissions(event);
+
+    if (!isAuthorized) {
+      throw new HttpException("Unauthorized request", 403);
+    }
+
     const data = getData(event);
 
     const payment = {
@@ -44,7 +52,7 @@ const createPayment: Handler = async (
       error: e.message,
     };
 
-    return response(404, error);
+    return response(e.statusCode || 404, error);
   }
 };
 
