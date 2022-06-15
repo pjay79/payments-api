@@ -1,4 +1,3 @@
-"use strict";
 import {
   APIGatewayProxyEventV2,
   APIGatewayProxyResultV2,
@@ -52,7 +51,7 @@ const createPayment: Handler = async (
       error: e.message,
     };
 
-    return response(e.statusCode || 404, error);
+    return response(e.statusCode || 500, error);
   }
 };
 

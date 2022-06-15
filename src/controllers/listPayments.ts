@@ -39,7 +39,7 @@ const listPayments: Handler = async (
       error: e.message,
     };
 
-    return response(e.statusCode || 404, error);
+    return response(e.statusCode || 500, error);
   }
 };
 
