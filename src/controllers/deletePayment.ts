@@ -28,7 +28,7 @@ const deletePayment: Handler = async (
         throw new Error(e);
       });
 
-    return response(200, payment);
+    return response(200, {});
   } catch (e) {
     console.error("[PAYMENTS API] - DELETE", e);
 
