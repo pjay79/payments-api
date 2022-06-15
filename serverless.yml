@@ -22,6 +22,7 @@ provider:
   environment:
     STAGE: ${env:STAGE}
     REGION: ${env:REGION}
+    X_PAYMENTS_API_KEY: ${env:X_PAYMENTS_API_KEY}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
   iam:
     role:

@@ -1,9 +1,9 @@
 import { APIGatewayProxyEventV2 } from "aws-lambda";
+import HttpException from "exceptions/HttpException";
 
-const checkPermissions = (event: APIGatewayProxyEventV2) => {
+const checkPermissions = (event: APIGatewayProxyEventV2): boolean => {
   try {
     const apiKey = process.env.X_PAYMENTS_API_KEY;
-    console.info(event.headers);
 
     if (event.headers["X-Payments-API-Key"] !== apiKey) {
       return false;
@@ -11,7 +11,7 @@ const checkPermissions = (event: APIGatewayProxyEventV2) => {
     return true;
   } catch (e) {
     console.error(e);
-    return false;
+    throw new HttpException("Server error", 500);
   }
 };
 
